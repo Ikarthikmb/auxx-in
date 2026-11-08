@@ -12,7 +12,7 @@ from pathlib import Path
 
 import config
 
-MADE_MARK = "Made by Auxx In"
+MADE_MARK = "Made by Auxx-In"
 COVERS = Path(os.environ.get("DATA_ROOT", "/data")) / "covers"
 
 
@@ -95,7 +95,7 @@ def playlists():
     pls = (call("getPlaylists").get("playlists") or {}).get("playlist") or []
     return [{"id": p["id"], "name": p.get("name"), "songs": p.get("songCount"), "cover_id": p.get("coverArt"),
              "duration": p.get("duration"), "comment": p.get("comment") or "",
-             # made by Auxx In (the daily playlist, the IQ picks): a ✦ on the page.
+             # made by Auxx-In (the daily playlist, the IQ picks): a ✦ on the page.
              # "Made by Aux" also matches playlists from before the rename.
              "made": (p.get("comment") or "").startswith("Made by Aux") or p.get("name") == "Aux IQ"} for p in pls]
 

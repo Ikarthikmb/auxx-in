@@ -6,6 +6,7 @@ Thanks for helping. Small, focused pull requests are easiest to review.
 
 ```sh
 cp .env.example .env            # songs go to ./music unless you set MUSIC_DIR
+cp docker-compose.build.yml docker-compose.override.yml   # build from your checkout (git-ignored)
 docker compose up -d --build    # http://127.0.0.1:8140
 ```
 

@@ -200,7 +200,7 @@
     var idle = deviceMode() && !P.item;
     $('miniTitle').textContent = idle ? 'Tap ▶ to play' : n ? n.title : (S.radio_on ? 'Starting…' : 'Radio is off');
     $('miniSub').textContent = idle ? (S.queue.length ? S.queue.length + ' in the queue' : 'Library shuffle') :
-      n ? sub(n.artist, deviceMode() ? 'this device' : 'Auxx In radio') : '';
+      n ? sub(n.artist, deviceMode() ? 'this device' : 'Auxx-In radio') : '';
     var q = S.queue.filter(function(i){ return i.status !== 'failed'; }).length;
     var busy = S.queue.concat(S.jobs).filter(function(i){ return /pending|resolving|downloading/.test(i.status); }).length;
     document.querySelectorAll('[data-qcount]').forEach(function(b){ b.textContent = q; b.hidden = !q; });
@@ -370,9 +370,9 @@
     }
     audio.pause(); audio.removeAttribute('src'); audio.load(); P.item = null;
     if (handoff){ S.play_on = 'device'; devPlay(handoff); }  // in the tap itself, so the phone lets it play
-    toast(mode === 'radio' ? 'Switching to the Auxx In radio…' : 'Switching to this device…');
+    toast(mode === 'radio' ? 'Switching to the Auxx-In radio…' : 'Switching to this device…');
     post('settings', body).then(function(){
-      toast(mode === 'radio' ? 'Playing on the Auxx In radio.' : handoff ? 'Playing on this device.' : 'Playing on this device. Tap ▶ to start.');
+      toast(mode === 'radio' ? 'Playing on the Auxx-In radio.' : handoff ? 'Playing on this device.' : 'Playing on this device. Tap ▶ to start.');
       refresh().then(function(){ if (route().tab === 'now') render(); });
     }, fail);
   }
@@ -394,7 +394,7 @@
     if (!('mediaSession' in navigator) || !S || !S.now) return;
     var n = S.now, art = n.cover ? [{src:new URL(n.cover, location.href).href, sizes:'300x300'}] : [];
     try {
-      navigator.mediaSession.metadata = new MediaMetadata({title:n.title || 'Auxx In', artist:n.artist || '', album:n.album || 'Auxx In radio', artwork:art});
+      navigator.mediaSession.metadata = new MediaMetadata({title:n.title || 'Auxx-In', artist:n.artist || '', album:n.album || 'Auxx-In radio', artwork:art});
       navigator.mediaSession.setActionHandler('nexttrack', skip);
       navigator.mediaSession.setActionHandler('pause', function(){ toggleListen(); });
       navigator.mediaSession.setActionHandler('play', function(){ toggleListen(); });
@@ -510,7 +510,7 @@
     if (!dev){ var cap = el('div', 'now-cap'); cap.id = 'nowCap'; v.appendChild(cap); }
     var po = el('div', 'seg playon'); po.setAttribute('role', 'radiogroup'); po.setAttribute('aria-label', 'Play on');
     var b1 = iconBtn('phone', dev ? 'cur' : '', function(){ if (!deviceMode()) setPlayOn('device'); }, null, 'This device');
-    var b2 = iconBtn('radio', dev ? '' : 'cur', function(){ if (deviceMode()) setPlayOn('radio'); }, null, 'Auxx In radio');
+    var b2 = iconBtn('radio', dev ? '' : 'cur', function(){ if (deviceMode()) setPlayOn('radio'); }, null, 'Auxx-In radio');
     [b1, b2].forEach(function(b, i){ b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', (i === 0) === dev ? 'true' : 'false'); po.appendChild(b); });
     var pw = el('div', 'playon-wrap'); pw.appendChild(po); v.appendChild(pw);
     if (dev){
@@ -871,7 +871,7 @@
       return [label, hint, b];
     }
 
-    v.appendChild(el('h2', null, 'Auxx In radio'));
+    v.appendChild(el('h2', null, 'Auxx-In radio'));
     var c1 = el('div', 'card settings'); c1.id = 'setPanel'; v.appendChild(c1);
     var rb = btn('', 'switch'); rb.id = 'set_radio';
     rb.onclick = function(){ post('radio', {on:!S.radio_on}).then(done, fail); };
@@ -885,7 +885,7 @@
     }));
     sr.querySelector('label').appendChild(el('span', 'hint')).appendChild(code);
     sr.querySelector('label').appendChild(el('span', 'hint', S && S.navidrome === false
-      ? 'Open it in any player that takes a stream URL (VLC, a browser…)' : 'In any Navidrome client: Radio → Auxx In'));
+      ? 'Open it in any player that takes a stream URL (VLC, a browser…)' : 'In any Navidrome client: Radio → Auxx-In'));
 
     v.appendChild(el('h2', null, 'Playback'));
     var c2 = el('div', 'card settings'); v.appendChild(c2);
@@ -962,7 +962,7 @@
       function gb(b){ return b >= 1e9 ? (b / 1e9).toFixed(1) + ' GB' : Math.round(b / 1e6) + ' MB'; }
       sc.textContent = '';
       row(sc, 'Music', d.songs.toLocaleString() + ' songs · ' + gb(d.music), null);
-      row(sc, 'Auxx In data', 'Settings, queue, covers and downloads in progress · ' + gb(d.data), null);
+      row(sc, 'Auxx-In data', 'Settings, queue, covers and downloads in progress · ' + gb(d.data), null);
       row(sc, 'Free space', gb(d.disk_free) + ' free of ' + gb(d.disk_total), null);
     }, function(){ sc.textContent = ''; sc.appendChild(el('div', 'hint', 'Couldn\'t count storage.')); });
 
@@ -1076,7 +1076,7 @@
         }));
         row(list, x.name, x.admin ? 'Admin' : 'Listener', acts);
       });
-      if (!d.users.length) list.appendChild(el('div', 'hint', 'No Auxx In accounts yet.'));
+      if (!d.users.length) list.appendChild(el('div', 'hint', 'No Auxx-In accounts yet.'));
       if (d.navidrome) list.appendChild(el('div', 'hint', 'Navidrome users can log in with their Navidrome account too; manage them in Navidrome. Navidrome admins are admins here.'));
     }
     var nu = document.createElement('input'); nu.placeholder = 'Username'; nu.autocomplete = 'off'; nu.autocapitalize = 'none'; nu.className = 'cfg';
@@ -1235,7 +1235,7 @@
       if (d.error) return err(d);
       box.textContent = '';
       var fc = el('div', 'chips'), l = el('div', 'list');
-      [['all', 'All'], ['made', '✦ Made by Auxx In']].forEach(function(c){
+      [['all', 'All'], ['made', '✦ Made by Auxx-In']].forEach(function(c){
         fc.appendChild(btn(c[1], plFilter === c[0] ? 'on' : '', function(){
           plFilter = c[0]; fc.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); }); this.classList.add('on'); paint();
         }));
@@ -1244,7 +1244,7 @@
         l.textContent = '';
         var list = d.filter(function(p){ return plFilter === 'all' || p.made; });
         list.forEach(function(p){ l.appendChild(playlistRow(p)); });
-        if (!list.length) l.appendChild(el('div', 'empty', 'Auxx In makes a playlist for you every morning.'));
+        if (!list.length) l.appendChild(el('div', 'empty', 'Auxx-In makes a playlist for you every morning.'));
       }
       box.appendChild(fc); box.appendChild(l); paint();
     }, err);
@@ -1277,7 +1277,7 @@
       sub:p.made && p.comment ? sub(p.comment.replace(/^Made by Auxx?( In)?\s*·\s*/, ''), (p.songs || 0) + ' songs') : (p.songs || 0) + ' songs',
       onTap:function(){ location.hash = '#library/playlist/' + p.id; },
       buttons:[btn('⤮', 'icon ghost', libQueue({playlist_id:p.id}, 'end', {shuffle:true}), 'Shuffle into queue')]});
-    if (p.made){ var m = el('span', 'made', '✦'); m.title = 'Made by Auxx In'; r.querySelector('.cv').appendChild(m); }
+    if (p.made){ var m = el('span', 'made', '✦'); m.title = 'Made by Auxx-In'; r.querySelector('.cv').appendChild(m); }
     return r;
   }
   var plFilter = 'all';
@@ -1482,7 +1482,7 @@
       });
       box.appendChild(a);
       if (!d.active.length) box.appendChild(el('div', 'empty', 'Nothing downloading.'));
-      box.appendChild(el('h2', null, 'Saved by Auxx In'));
+      box.appendChild(el('h2', null, 'Saved by Auxx-In'));
       var s = el('div', 'list');
       d.saved.forEach(function(it){
         function q(where){ return function(){ post('queue-path', {path:it.path, where:where}).then(done, fail); }; }

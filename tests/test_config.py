@@ -69,3 +69,23 @@ def test_env_comment_is_not_a_value(monkeypatch):
     monkeypatch.setenv("NAVIDROME_URL", "# e.g. http://navidrome:4533")
     assert config.get("navidrome_url") == ""
     assert config.navidrome_on() is False
+
+
+def test_radio_station_is_renamed_not_duplicated(monkeypatch):
+    import app
+    import config
+    import nav
+    monkeypatch.undo()  # conftest stubs nd_radio_station out; this test needs the real one
+    config.save({"stream_url": "http://host:8141/aux.mp3"})
+    calls = []
+
+    def fake(method, **kw):
+        calls.append((method, kw))
+        if method == "getInternetRadioStations":
+            return {"internetRadioStations": {"internetRadioStation": [
+                {"id": "7", "name": "Auxx In", "streamUrl": "http://host:8141/aux.mp3"}]}}
+        return {}
+    monkeypatch.setattr(nav, "call", fake)
+    assert app.nd_radio_station()
+    assert ("updateInternetRadioStation", {"id": "7", "streamUrl": "http://host:8141/aux.mp3", "name": "Auxx-In"}) in calls
+    assert not any(m == "createInternetRadioStation" for m, _ in calls)

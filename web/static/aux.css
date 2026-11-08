@@ -200,7 +200,7 @@ h2 .sp{flex:1}
 /* Now: title and artist on one line each, the reason (IQ / queue) under them */
 .now-title,.now-sub,.now-tag{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .now-tag{margin-bottom:4px}
-/* Playlists made by Auxx In: a ✦ on the cover */
+/* Playlists made by Auxx-In: a ✦ on the cover */
 .row .cv{position:relative}
 .row .cv .made{position:absolute;top:2px;right:3px;font-size:12px;line-height:1;color:#fff;text-shadow:0 0 4px rgba(0,0,0,.8)}
 

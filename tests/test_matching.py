@@ -1,4 +1,4 @@
-"""How Auxx In names and finds songs (songs.py): no network."""
+"""How Auxx-In names and finds songs (songs.py): no network."""
 from pathlib import Path
 
 import songs

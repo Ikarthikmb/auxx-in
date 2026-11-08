@@ -1,4 +1,4 @@
-"""Auxx In configuration: environment defaults, overridden by what is saved from
+"""Auxx-In configuration: environment defaults, overridden by what is saved from
 Settings -> Configuration (DATA_ROOT/config.json). Read with get(); changes
 take effect right away, no restart."""
 import json
@@ -11,13 +11,13 @@ FILE = Path(os.environ.get("DATA_ROOT", "/data")) / "config.json"
 # (section, key, env var, default, label, hint, kind: toggle | text | number | secret)
 FIELDS = [
     ("Navidrome", "use_navidrome", "USE_NAVIDROME", True, "Use Navidrome",
-     "Library tab, playlists, favorites and the \"Auxx In\" station in Navidrome clients", "toggle"),
+     "Library tab, playlists, favorites and the \"Auxx-In\" station in Navidrome clients", "toggle"),
     ("Navidrome", "navidrome_url", "NAVIDROME_URL", "", "Server address",
      "As Aux reaches it, e.g. http://navidrome:4533", "text"),
     ("Navidrome", "navidrome_user", "NAVIDROME_USER", "", "Username", None, "text"),
     ("Navidrome", "navidrome_pass", "NAVIDROME_PASS", "", "Password", None, "secret"),
     ("Radio", "stream_url", "STREAM_URL", "http://localhost:8141/aux.mp3", "Stream address",
-     "What Navidrome clients tune in to; added to Navidrome as the \"Auxx In\" radio station", "text"),
+     "What Navidrome clients tune in to; added to Navidrome as the \"Auxx-In\" radio station", "text"),
     ("Library", "requests_playlist", "REQUESTS_PLAYLIST", "Requests", "Requests playlist",
      "Navidrome playlist shared songs are saved to", "text"),
     ("Library", "playlist_cap", "PLAYLIST_CAP", 50, "Playlist cap",

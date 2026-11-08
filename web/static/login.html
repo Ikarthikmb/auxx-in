@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Auxx In</title>
+<title>Auxx-In</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Auxx In">
+<meta name="apple-mobile-web-app-title" content="Auxx-In">
 <meta name="theme-color" content="#1c1a17">
 <link rel="icon" href="static/icon.svg">
 <link rel="apple-touch-icon" href="static/icon-180.png">
 <link rel="manifest" href="static/manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="static/aux.css?v=14">
+<link rel="stylesheet" href="static/aux.css?v=15">
 <script>/* theme before the page draws (Settings → Theme, this device only) */
 try{var t=localStorage.getItem('auxx-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
 <style>
@@ -26,14 +26,14 @@ try{var t=localStorage.getItem('auxx-theme');if(t==='light'||t==='dark')document
 </head>
 <body>
 <main class="login">
-  <h1>Auxx In</h1>
+  <h1>Auxx-In</h1>
   <p id="lead">Log in to share songs and run the radio.</p>
   <form id="form" hidden>
     <label>Username <input id="u" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
     <label>Password <input id="p" type="password" autocomplete="current-password" required></label>
     <label id="p2wrap" hidden>Password again <input id="p2" type="password" autocomplete="new-password"></label>
     <label id="codewrap" hidden>Setup code <input id="code" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EF12-3456">
-      <span class="hint">Printed in the server log when Auxx In first starts: <code>docker logs auxx-in-web</code></span></label>
+      <span class="hint">Printed in the server log when Auxx-In first starts: <code>docker logs auxx-in-web</code></span></label>
     <div class="err" id="err" role="alert"></div>
     <button class="primary" id="go" type="submit">Log in</button>
   </form>
@@ -51,10 +51,10 @@ try{var t=localStorage.getItem('auxx-theme');if(t==='light'||t==='dark')document
       $('p').autocomplete = 'new-password'; $('p2wrap').hidden = false; $('p2').required = true; $('codewrap').hidden = false; $('code').required = true;
       $('go').textContent = 'Create admin';
     } else if (me.navidrome){
-      $('lead').textContent = 'Log in with your Auxx In or Navidrome account.';
+      $('lead').textContent = 'Log in with your Auxx-In or Navidrome account.';
     }
     $('form').hidden = false; $('u').focus();
-  }).catch(function(){ $('err').textContent = 'Auxx In isn\'t answering. Try again in a moment.'; });
+  }).catch(function(){ $('err').textContent = 'Auxx-In isn\'t answering. Try again in a moment.'; });
 
   $('form').onsubmit = function(e){
     e.preventDefault();

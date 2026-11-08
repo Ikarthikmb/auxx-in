@@ -9,7 +9,7 @@ labels: bug
 **Steps to reproduce**
 
 **Versions**
-- Auxx In version / image tag:
+- Auxx-In version / image tag:
 - `docker exec auxx-in-web yt-dlp --version`:
 - Navidrome on or off (and its version):
 

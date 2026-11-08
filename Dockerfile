@@ -1,4 +1,4 @@
-# Auxx In web app: Flask + the downloaders (yt-dlp, ffmpeg, ytmusicapi).
+# Auxx-In web app: Flask + the downloaders (yt-dlp, ffmpeg, ytmusicapi).
 # Deno is the JavaScript runtime yt-dlp needs for YouTube.
 FROM denoland/deno:bin-2.9.8 AS deno
 

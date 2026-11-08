@@ -1,7 +1,7 @@
-# Auxx In radio: plays the shared-song queue from aux-web first; when it's empty,
+# Auxx-In radio: plays the shared-song queue from aux-web first; when it's empty,
 # plays /aux-data/fallback.m3u (written by aux-web: the whole library, the
 # Requests playlist, a playlist, an artist... or nothing). Streams MP3 at
-# http://<host>:8141/aux.mp3 (in any Navidrome client: Radio -> Auxx In).
+# http://<host>:8141/aux.mp3 (in any Navidrome client: Radio -> Auxx-In).
 settings.log.stdout.set(true)
 settings.log.file.set(false)
 settings.log.level.set(3)

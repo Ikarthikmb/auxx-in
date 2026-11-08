@@ -1,0 +1,7 @@
+# Build the web image from this checkout instead of pulling the published one:
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+# (or copy it to docker-compose.override.yml, which Compose reads on its own).
+services:
+  aux-web:
+    build: .
+    image: auxx-in:local

@@ -1,10 +1,10 @@
-"""Auxx In login. Three ways in:
+"""Auxx-In login. Three ways in:
   - built-in users: DATA_ROOT/users.json, Werkzeug password hashes. The first
     visit (no users yet, no Navidrome) creates the admin.
   - Navidrome users, when Navidrome is on: the login is checked against
-    Navidrome; Navidrome admins are Auxx In admins.
+    Navidrome; Navidrome admins are Auxx-In admins.
   - a trusted reverse-proxy header (AUTH_PROXY_HEADER, e.g. Remote-User from
-    Authelia / Authentik / Tinyauth). Only set it when Auxx In can't be reached
+    Authelia / Authentik / Tinyauth). Only set it when Auxx-In can't be reached
     except through that proxy.
 Sessions are Flask-Login's signed cookies."""
 import hashlib
@@ -168,7 +168,7 @@ def check_navidrome(name, password):
 
 
 def check_login(name, password):
-    """An Auxx In admin is an admin. Otherwise, if the same login also works
+    """An Auxx-In admin is an admin. Otherwise, if the same login also works
     in Navidrome and is an admin there, they're an admin here too."""
     local = check_local(name, password)
     if local and local.admin:
@@ -194,7 +194,7 @@ def setup_code():
     v = "-".join(secrets.token_hex(2).upper() for _ in range(3))
     p.write_text(v)
     os.chmod(p, 0o600)
-    print(f"\n  Auxx In first run: create the admin at the login page with setup code  {v}\n"
+    print(f"\n  Auxx-In first run: create the admin at the login page with setup code  {v}\n"
           f"  (also in the data folder: setup.code)\n", flush=True)
     return v
 
@@ -209,7 +209,7 @@ def bootstrap():
     name, pw = os.environ.get("ADMIN_USER", "").strip(), os.environ.get("ADMIN_PASSWORD", "")
     if name and pw and not _load():
         create_user(name, pw, admin=True)
-        print(f"Auxx In: made the admin {name!r} from ADMIN_USER. Remove ADMIN_PASSWORD from .env now.", flush=True)
+        print(f"Auxx-In: made the admin {name!r} from ADMIN_USER. Remove ADMIN_PASSWORD from .env now.", flush=True)
     if needs_setup():
         setup_code()
     else:

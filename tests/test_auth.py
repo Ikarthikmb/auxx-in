@@ -174,4 +174,4 @@ def test_navidrome_admin_wins_over_same_name_listener(monkeypatch):
     assert u.admin and u.source == "navidrome"
     monkeypatch.setattr(auth, "check_navidrome", lambda n, p: auth.User(n, "navidrome", False))
     u = auth.check_login("sam", "listener-pass")
-    assert not u.admin and u.source == "local"  # keep the Auxx In account (its password can change here)
+    assert not u.admin and u.source == "local"  # keep the Auxx-In account (its password can change here)

@@ -1,4 +1,4 @@
-"""Auxx In: share a song (or a playlist), it plays next on the Aux radio.
+"""Auxx-In: share a song (or a playlist), it plays next on the Aux radio.
 
 The Aux page is the remote (and a player): now playing, up next, the radio
 switch, what plays when the queue is empty, sleep timer, downloads, the
@@ -48,7 +48,7 @@ STATIC = Path(__file__).with_name("static")
 RADIO_HOST = os.environ.get("RADIO_HOST", "aux-radio")
 RADIO_TELNET = int(os.environ.get("RADIO_TELNET", "1234"))
 if DATA.is_dir() and not os.access(DATA, os.W_OK):
-    sys.exit(f"Auxx In can't write to its data folder (AUX_DATA in .env; {DATA} in the container) as user "
+    sys.exit(f"Auxx-In can't write to its data folder (AUX_DATA in .env; {DATA} in the container) as user "
              f"{os.getuid()}:{os.getgid()}. Make that folder owned by PUID:PGID from .env, e.g.\n"
              f"  sudo chown -R {os.getuid()}:{os.getgid()} ./data\nthen: docker compose up -d")
 INTERNAL_KEY = os.environ.get("INTERNAL_KEY", "")
@@ -70,7 +70,7 @@ app = Flask(__name__, static_folder=None)
 app.secret_key = auth.secret_key()
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
-    # Set COOKIE_SECURE=true when Auxx In is served over HTTPS.
+    # Set COOKIE_SECURE=true when Auxx-In is served over HTTPS.
     SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE", "").lower() == "true",
     REMEMBER_COOKIE_HTTPONLY=True, REMEMBER_COOKIE_SAMESITE="Lax",
     REMEMBER_COOKIE_SECURE=os.environ.get("COOKIE_SECURE", "").lower() == "true",
@@ -628,7 +628,7 @@ def llm_json(prompt, kind="["):
         text = llm(prompt)
     except Exception as e:
         log("aux iq: llm failed:", e)
-        _iq["error"] = "AI busy right now · using Auxx In’s own ranking"
+        _iq["error"] = "AI busy right now · using Auxx-In’s own ranking"
         return None
     if not text:
         return None
@@ -913,7 +913,7 @@ def iq_tick(force=False):
 
 
 # ------------------------------------------------------------------ daily playlist
-# Every morning (after DAILY_HOUR) one Navidrome playlist, "Made by Auxx In" in its
+# Every morning (after DAILY_HOUR) one Navidrome playlist, "Made by Auxx-In" in its
 # comment, is rebuilt from your listening and renamed for the day:
 #  - songs you play to the end and your favourite artists,
 #  - a few by artists you like that you haven't played lately,
@@ -1133,12 +1133,19 @@ def nd_playlist_add(name, song_id, newest_first=False):
         nav.call("updatePlaylist", playlistId=pl["id"], songIdToAdd=song_id)
 
 
+STATION_NAME = "Auxx-In"
+
+
 def nd_radio_station():
     try:
         st = (nav.call("getInternetRadioStations").get("internetRadioStations") or {}).get("internetRadioStation") or []
-        if not any(s.get("streamUrl") == config.get("stream_url") for s in st):
-            nav.call("createInternetRadioStation", streamUrl=config.get("stream_url"), name="Auxx In")
-            log("navidrome: added the Aux radio station")
+        mine = next((s for s in st if s.get("streamUrl") == config.get("stream_url")), None)
+        if not mine:
+            nav.call("createInternetRadioStation", streamUrl=config.get("stream_url"), name=STATION_NAME)
+            log("navidrome: added the Auxx-In radio station")
+        elif mine.get("name") != STATION_NAME:  # e.g. made under an older name
+            nav.call("updateInternetRadioStation", id=mine["id"], streamUrl=mine["streamUrl"], name=STATION_NAME)
+            log("navidrome: renamed the radio station to", STATION_NAME)
         return True
     except Exception as e:
         log("navidrome radio station:", e)
@@ -2274,7 +2281,7 @@ def duration_of(it):
 
 def lrclib(path, qs):
     u = f"https://lrclib.net/api/{path}?" + urllib.parse.urlencode(qs)
-    with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Auxx In (self-hosted music player)"}), timeout=10) as r:
+    with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Auxx-In (self-hosted music player)"}), timeout=10) as r:
         return json.loads(r.read())
 
 
@@ -2528,4 +2535,4 @@ if __name__ == "__main__":
     threading.Thread(target=timers_loop, daemon=True).start()
     # waitress: a production server in pure Python. Threads: song streams and
     # previews hold one each while they play, so leave room for them.
-    serve(app, host="0.0.0.0", port=8140, threads=int(os.environ.get("WEB_THREADS", "32")), ident="Auxx In")
+    serve(app, host="0.0.0.0", port=8140, threads=int(os.environ.get("WEB_THREADS", "32")), ident="Auxx-In")
