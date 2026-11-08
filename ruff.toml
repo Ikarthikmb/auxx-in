@@ -1,0 +1,5 @@
+# Real mistakes only (syntax, undefined names, unused imports...), not style.
+target-version = "py313"
+line-length = 140
+[lint]
+select = ["E9", "F", "B006", "B008"]

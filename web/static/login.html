@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Auxx In</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Auxx In">
+<meta name="theme-color" content="#1c1a17">
+<link rel="icon" href="static/icon.svg">
+<link rel="apple-touch-icon" href="static/icon-180.png">
+<link rel="manifest" href="static/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="static/aux.css?v=14">
+<script>/* theme before the page draws (Settings → Theme, this device only) */
+try{var t=localStorage.getItem('auxx-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>
+  .login{max-width:360px;margin:12vh auto 0;padding:0 16px}
+  .login h1{font-size:28px;margin:0 0 4px}
+  .login p{color:var(--ink-dim);margin:0 0 20px;font-size:14px}
+  .login form{display:grid;gap:12px}
+  .login label{display:grid;gap:6px;font-weight:600;font-size:14px}
+  .login button{justify-content:center}
+  .login .err{color:var(--bad);font-size:14px;min-height:1.2em}
+</style>
+</head>
+<body>
+<main class="login">
+  <h1>Auxx In</h1>
+  <p id="lead">Log in to share songs and run the radio.</p>
+  <form id="form" hidden>
+    <label>Username <input id="u" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+    <label>Password <input id="p" type="password" autocomplete="current-password" required></label>
+    <label id="p2wrap" hidden>Password again <input id="p2" type="password" autocomplete="new-password"></label>
+    <label id="codewrap" hidden>Setup code <input id="code" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EF12-3456">
+      <span class="hint">Printed in the server log when Auxx In first starts: <code>docker logs auxx-in-web</code></span></label>
+    <div class="err" id="err" role="alert"></div>
+    <button class="primary" id="go" type="submit">Log in</button>
+  </form>
+</main>
+<script>
+(function(){
+  'use strict';
+  var csrf = '', setup = false;
+  function $(id){ return document.getElementById(id); }
+  fetch('api/me', {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(me){
+    if (me.user){ location.replace('./'); return; }
+    csrf = me.csrf; setup = me.setup;
+    if (setup){
+      $('lead').textContent = 'Welcome. Create the admin account to get started.';
+      $('p').autocomplete = 'new-password'; $('p2wrap').hidden = false; $('p2').required = true; $('codewrap').hidden = false; $('code').required = true;
+      $('go').textContent = 'Create admin';
+    } else if (me.navidrome){
+      $('lead').textContent = 'Log in with your Auxx In or Navidrome account.';
+    }
+    $('form').hidden = false; $('u').focus();
+  }).catch(function(){ $('err').textContent = 'Auxx In isn\'t answering. Try again in a moment.'; });
+
+  $('form').onsubmit = function(e){
+    e.preventDefault();
+    if (setup && $('p').value !== $('p2').value){ $('err').textContent = 'The passwords don\'t match.'; return; }
+    $('go').disabled = true; $('err').textContent = '';
+    fetch(setup ? 'api/setup' : 'api/login', {method:'POST', headers:{'Content-Type':'application/json', 'X-CSRFToken':csrf},
+      body:JSON.stringify({username:$('u').value.trim(), password:$('p').value, code:$('code').value.trim()})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d.ok){ location.replace('./'); return; }
+        $('err').textContent = d.error || 'That didn\'t work.'; $('go').disabled = false;
+      }, function(){ $('err').textContent = 'That didn\'t work.'; $('go').disabled = false; });
+  };
+})();
+</script>
+</body>
+</html>

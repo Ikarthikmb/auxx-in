@@ -1,0 +1,45 @@
+# Your settings and data: never public
+.env
+.env.*
+!.env.example
+data/*
+!data/.gitkeep
+music/*
+!music/.gitkeep
+docker-compose.override.yml
+.check-public.local
+
+# Secrets and personal files, wherever they end up
+cookies.txt
+*.key
+*.pem
+setup.code
+users.json
+config.json
+state.json
+
+# Music and downloads in progress
+*.mp3
+*.flac
+*.m4a
+*.webm
+*.opus
+tmp*/
+
+# Python, tests, lint
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+*.log

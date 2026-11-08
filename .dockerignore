@@ -1,0 +1,6 @@
+# The image only needs requirements.txt and web/: keep everything else
+# (above all your .env, data and private word list) out of the build.
+*
+!requirements.txt
+!web/
+**/__pycache__/

@@ -1,0 +1,53 @@
+# Auxx In: share a song or playlist, it plays next on the radio.
+#   aux-web   the Auxx In page, the add API, downloads + tagging, queue
+#             (its own image: Flask, yt-dlp, ffmpeg, ytmusicapi, Deno).
+#   aux-radio Liquidsoap: plays the queue, falls back to the library when it's
+#             empty. With Navidrome on, aux-web adds it to Navidrome as the
+#             "Auxx In" radio station, so any Navidrome client can play it.
+# Standalone: no outside networks or services. Navidrome login, stream address,
+# downloads and Aux IQ are set on the page: Settings -> Configuration.
+services:
+  aux-web:
+    build: .
+    image: auxx-in:local
+    container_name: auxx-in-web
+    restart: unless-stopped
+    mem_limit: 512m
+    user: "${PUID:-1000}:${PGID:-1000}"
+    env_file: ./.env
+    environment:
+      - TZ=${TZ:-UTC}
+      - RADIO_HOST=aux-radio
+    ports:
+      - "${AUX_BIND:-127.0.0.1}:${AUX_WEB_PORT:-8140}:8140"
+    volumes:
+      - ${AUX_DATA:-./data}:/data
+      # Not set: the music/ folder here. With Navidrome, set it to the folder Navidrome scans.
+      - ${MUSIC_DIR:-./music}:/music
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8140/', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+
+  aux-radio:
+    image: savonet/liquidsoap:v2.4.6
+    container_name: auxx-in-radio
+    restart: unless-stopped
+    mem_limit: 256m
+    user: "${PUID:-1000}:${PGID:-1000}"
+    command: ["/radio/aux.liq"]
+    env_file: ./.env
+    environment:
+      - AUX_WEB=http://aux-web:8140
+      - HOME=/tmp
+    ports:
+      - "${AUX_BIND:-127.0.0.1}:${AUX_RADIO_PORT:-8141}:8141"
+    volumes:
+      - ./radio:/radio:ro
+      - ${MUSIC_DIR:-./music}:/music:ro
+      # fallback.m3u (what plays when the queue is empty) and internal.key, written by aux-web
+      - ${AUX_DATA:-./data}:/aux-data:ro
+    depends_on:
+      aux-web:
+        condition: service_healthy

@@ -1,0 +1,18 @@
+# Weekly update PRs. yt-dlp matters most: YouTube changes break downloads until it's bumped.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      downloaders:
+        patterns: ["yt-dlp*", "ytmusicapi", "curl-cffi"]
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
