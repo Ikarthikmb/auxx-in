@@ -1,4 +1,7 @@
-# Weekly update PRs. yt-dlp matters most: YouTube changes break downloads until it's bumped.
+# Weekly update PRs, grouped so related updates come as one PR (no conflicts
+# between them). yt-dlp matters most: YouTube changes break downloads until
+# it's bumped. CI doesn't download from YouTube, so try a downloaders PR on a
+# real song before merging it.
 version: 2
 updates:
   - package-ecosystem: pip
@@ -8,6 +11,8 @@ updates:
     groups:
       downloaders:
         patterns: ["yt-dlp*", "ytmusicapi", "curl-cffi"]
+      web:
+        patterns: ["flask*", "waitress", "mutagen", "pytest", "ruff"]
   - package-ecosystem: docker
     directory: /
     schedule:
@@ -16,3 +21,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
