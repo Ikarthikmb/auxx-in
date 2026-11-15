@@ -2,7 +2,7 @@
 # Deno is the JavaScript runtime yt-dlp needs for YouTube.
 FROM denoland/deno:bin-2.9.8 AS deno
 
-FROM python:3.13-slim
+FROM python:3.15-slim
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
