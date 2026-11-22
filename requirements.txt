@@ -2,7 +2,7 @@
 yt-dlp==2026.10.26
 yt-dlp-ejs==0.8.0
 curl-cffi==0.17.0
-ytmusicapi==1.12.3
+ytmusicapi==1.12.4
 mutagen==1.48.1
 flask==3.1.3
 waitress==3.0.2
